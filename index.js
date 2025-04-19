@@ -7,7 +7,7 @@ const DATA_FILE = 'data.json';
 
 let canal = {
   nome: "Meu Canal no YouTube",
-  imagem: "https://yt3.googleusercontent.com/PfK_VFWJDrsPpwu466-aNtdt6BdGWgYSb_hyQWex6B5zNHQi8cP2XKUm1vk95SFZ08xT9pde-g=s160-c-k-c0x00ffffff-no-rj",
+  imagem: "https://i.ibb.co/x8KR2DNw/channels4-profile.jpg",
   link: "https://youtube.com/@ice_noobz?si=95x2-51So46C24Ga"
 };
 let itens = [];
