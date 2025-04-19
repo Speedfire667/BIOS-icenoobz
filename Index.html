@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Bio do Canal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2d2d44);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #383858;
+      margin: 0.5rem 0;
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+    li:hover {
+      transform: scale(1.05);
+      background: #4a4a6a;
+    }
+    input, button {
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+    }
+    input {
+      width: 250px;
+    }
+    button {
+      background-color: #00c6ff;
+      color: #fff;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00a2cc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Links do Canal</h1>
+  <ul id="lista-links"></ul>
+
+  <div>
+    <input type="text" id="novoLink" placeholder="Novo link" />
+    <button onclick="adicionarLink()">Adicionar</button>
+  </div>
+
+  <script>
+    const BIN_ID = "664a49b1ad19ca34f87ad3d1"; // seu bin
+    const API_KEY = "$2a$10$e.No.VCnsylLumspynQ9y.FbpyYyig4ZnmzVxPK61ou5mhdK/72p."; // sua API
+    const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+    async function carregarLinks() {
+      const res = await fetch(BASE_URL + '/latest', {
+        headers: { 'X-Master-Key': API_KEY }
+      });
+      const json = await res.json();
+      const links = json.record.links;
+
+      const lista = document.getElementById("lista-links");
+      lista.innerHTML = '';
+      links.forEach(link => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${link}" target="_blank" style="color:white; text-decoration:none;">${link}</a>`;
+        lista.appendChild(li);
+      });
+    }
+
+    async function adicionarLink() {
+      const input = document.getElementById("novoLink");
+      const novo = input.value.trim();
+      if (!novo) return;
+
+      const res = await fetch(BASE_URL + '/latest', {
+        headers: { 'X-Master-Key': API_KEY }
+      });
+      const json = await res.json();
+      const links = json.record.links;
+      links.push(novo);
+
+      await fetch(BASE_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY
+        },
+        body: JSON.stringify({ links })
+      });
+
+      input.value = '';
+      carregarLinks();
+    }
+
+    carregarLinks();
+  </script>
+</body>
+</html>
